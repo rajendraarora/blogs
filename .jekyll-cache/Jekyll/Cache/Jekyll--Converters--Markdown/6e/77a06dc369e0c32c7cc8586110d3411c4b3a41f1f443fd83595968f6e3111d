@@ -1,0 +1,19 @@
+I"^<p><strong>What is Data Structure?<strong></strong></strong></p>
+
+<p>A way of organizing the data in such a way so that can be used efficiently.</p>
+
+<p><strong>Difference between Linear and non-linear data structure:</strong></p>
+
+<p><strong>Linear</strong></p>
+
+<ul>
+  <li>If an element form a sequence or a linear list. It is said to be Linear. <em>E.g:</em> Array, LinkedList, Stack and Queues.</li>
+  <li>Traversal are Linear.</li>
+</ul>
+
+<p><strong>Non-linear</strong></p>
+
+<ul>
+  <li>Traversal of node is non-linear in nature then it is said to be non-linear. <em>E.g:</em> Tree, graphs.</li>
+</ul>
+:ET

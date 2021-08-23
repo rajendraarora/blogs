@@ -1,0 +1,191 @@
+I"�N<p>How to detect object using tensorflow with real time web cam?</p>
+
+<p algin="center">
+    <img src="https://blogs.rajendraarora.com/assets/img/tensorflow.png" data-canonical-src="https://blogs.rajendraarora.com/assets/img/tensorflow.png" width="700" height="300" />
+</p>
+
+<p>Hello there, this is my first blog I am writing here …</p>
+
+<p>If you are familar with <a href="https://www.tensorflow.org">TensorFlow</a> you might be interested how to detect object with real time web cam. I hope you have CUDA and CUDNN installed in your system.</p>
+
+<p>Let’s begin …</p>
+
+<p><strong>STEP - 1</strong></p>
+
+<p>Clone tensorflow built-in model from <a href="https://github.com/tensorflow/models">here</a>.</p>
+
+<p><code class="language-plaintext highlighter-rouge">$ cd &lt;download-directory&gt;/models-master/research/object_detection/</code></p>
+
+<p>Create a new file <code class="language-plaintext highlighter-rouge">object-detection-real-time.py</code> and replace source code below in your file:</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="n">np</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">six.moves.urllib</span> <span class="k">as</span> <span class="n">urllib</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">tarfile</span>
+<span class="kn">import</span> <span class="nn">tensorflow</span> <span class="k">as</span> <span class="n">tf</span>
+<span class="kn">import</span> <span class="nn">zipfile</span>
+
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">defaultdict</span>
+<span class="kn">from</span> <span class="nn">io</span> <span class="kn">import</span> <span class="n">StringIO</span>
+<span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+<span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span>
+
+<span class="kn">import</span> <span class="nn">cv2</span>
+<span class="n">cap</span> <span class="o">=</span> <span class="n">cv2</span><span class="p">.</span><span class="n">VideoCapture</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="c1"># This is needed since the notebook is stored in the object_detection folder.
+</span><span class="n">sys</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="s">".."</span><span class="p">)</span>
+
+
+<span class="c1"># ## Object detection imports
+# Here are the imports from the object detection module.
+</span>
+<span class="kn">from</span> <span class="nn">utils</span> <span class="kn">import</span> <span class="n">label_map_util</span>
+
+<span class="kn">from</span> <span class="nn">utils</span> <span class="kn">import</span> <span class="n">visualization_utils</span> <span class="k">as</span> <span class="n">vis_util</span>
+
+
+<span class="c1"># # Model preparation 
+</span>
+<span class="c1"># ## Variables
+# 
+# Any model exported using the `export_inference_graph.py` tool can be loaded here simply by changing `PATH_TO_CKPT` to point to a new .pb file.  
+# 
+# By default we use an "SSD with Mobilenet" model here. See the [detection model zoo](https://github.com/tensorflow/models/blob/master/object_detection/g3doc/detection_model_zoo.md) for a list of other models that can be run out-of-the-box with varying speeds and accuracies.
+</span>
+<span class="c1"># What model to download.
+</span><span class="n">MODEL_NAME</span> <span class="o">=</span> <span class="s">'ssd_mobilenet_v1_coco_11_06_2017'</span>
+<span class="n">MODEL_FILE</span> <span class="o">=</span> <span class="n">MODEL_NAME</span> <span class="o">+</span> <span class="s">'.tar.gz'</span>
+<span class="n">DOWNLOAD_BASE</span> <span class="o">=</span> <span class="s">'http://download.tensorflow.org/models/object_detection/'</span>
+
+<span class="c1"># Path to frozen detection graph. This is the actual model that is used for the object detection.
+</span><span class="n">PATH_TO_CKPT</span> <span class="o">=</span> <span class="n">MODEL_NAME</span> <span class="o">+</span> <span class="s">'/frozen_inference_graph.pb'</span>
+
+<span class="c1"># List of the strings that is used to add correct label for each box.
+</span><span class="n">PATH_TO_LABELS</span> <span class="o">=</span> <span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="n">join</span><span class="p">(</span><span class="s">'data'</span><span class="p">,</span> <span class="s">'mscoco_label_map.pbtxt'</span><span class="p">)</span>
+
+<span class="n">NUM_CLASSES</span> <span class="o">=</span> <span class="mi">90</span>
+
+
+<span class="c1"># ## Download Model
+</span>
+<span class="n">opener</span> <span class="o">=</span> <span class="n">urllib</span><span class="p">.</span><span class="n">request</span><span class="p">.</span><span class="n">URLopener</span><span class="p">()</span>
+<span class="n">opener</span><span class="p">.</span><span class="n">retrieve</span><span class="p">(</span><span class="n">DOWNLOAD_BASE</span> <span class="o">+</span> <span class="n">MODEL_FILE</span><span class="p">,</span> <span class="n">MODEL_FILE</span><span class="p">)</span>
+<span class="n">tar_file</span> <span class="o">=</span> <span class="n">tarfile</span><span class="p">.</span><span class="nb">open</span><span class="p">(</span><span class="n">MODEL_FILE</span><span class="p">)</span>
+<span class="k">for</span> <span class="nb">file</span> <span class="ow">in</span> <span class="n">tar_file</span><span class="p">.</span><span class="n">getmembers</span><span class="p">():</span>
+  <span class="n">file_name</span> <span class="o">=</span> <span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="n">basename</span><span class="p">(</span><span class="nb">file</span><span class="p">.</span><span class="n">name</span><span class="p">)</span>
+  <span class="k">if</span> <span class="s">'frozen_inference_graph.pb'</span> <span class="ow">in</span> <span class="n">file_name</span><span class="p">:</span>
+    <span class="n">tar_file</span><span class="p">.</span><span class="n">extract</span><span class="p">(</span><span class="nb">file</span><span class="p">,</span> <span class="n">os</span><span class="p">.</span><span class="n">getcwd</span><span class="p">())</span>
+
+
+<span class="c1"># ## Load a (frozen) Tensorflow model into memory.
+</span>
+<span class="n">detection_graph</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">Graph</span><span class="p">()</span>
+<span class="k">with</span> <span class="n">detection_graph</span><span class="p">.</span><span class="n">as_default</span><span class="p">():</span>
+  <span class="n">od_graph_def</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">GraphDef</span><span class="p">()</span>
+  <span class="k">with</span> <span class="n">tf</span><span class="p">.</span><span class="n">gfile</span><span class="p">.</span><span class="n">GFile</span><span class="p">(</span><span class="n">PATH_TO_CKPT</span><span class="p">,</span> <span class="s">'rb'</span><span class="p">)</span> <span class="k">as</span> <span class="n">fid</span><span class="p">:</span>
+    <span class="n">serialized_graph</span> <span class="o">=</span> <span class="n">fid</span><span class="p">.</span><span class="n">read</span><span class="p">()</span>
+    <span class="n">od_graph_def</span><span class="p">.</span><span class="n">ParseFromString</span><span class="p">(</span><span class="n">serialized_graph</span><span class="p">)</span>
+    <span class="n">tf</span><span class="p">.</span><span class="n">import_graph_def</span><span class="p">(</span><span class="n">od_graph_def</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">''</span><span class="p">)</span>
+
+
+<span class="c1"># ## Loading label map
+# Label maps map indices to category names, so that when our convolution network predicts `5`, we know that this corresponds to `airplane`.  Here we use internal utility functions, but anything that returns a dictionary mapping integers to appropriate string labels would be fine
+</span>
+<span class="n">label_map</span> <span class="o">=</span> <span class="n">label_map_util</span><span class="p">.</span><span class="n">load_labelmap</span><span class="p">(</span><span class="n">PATH_TO_LABELS</span><span class="p">)</span>
+<span class="n">categories</span> <span class="o">=</span> <span class="n">label_map_util</span><span class="p">.</span><span class="n">convert_label_map_to_categories</span><span class="p">(</span><span class="n">label_map</span><span class="p">,</span> <span class="n">max_num_classes</span><span class="o">=</span><span class="n">NUM_CLASSES</span><span class="p">,</span> <span class="n">use_display_name</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="n">category_index</span> <span class="o">=</span> <span class="n">label_map_util</span><span class="p">.</span><span class="n">create_category_index</span><span class="p">(</span><span class="n">categories</span><span class="p">)</span>
+
+
+<span class="c1"># ## Helper code
+</span>
+<span class="k">def</span> <span class="nf">load_image_into_numpy_array</span><span class="p">(</span><span class="n">image</span><span class="p">):</span>
+  <span class="p">(</span><span class="n">im_width</span><span class="p">,</span> <span class="n">im_height</span><span class="p">)</span> <span class="o">=</span> <span class="n">image</span><span class="p">.</span><span class="n">size</span>
+  <span class="k">return</span> <span class="n">np</span><span class="p">.</span><span class="n">array</span><span class="p">(</span><span class="n">image</span><span class="p">.</span><span class="n">getdata</span><span class="p">()).</span><span class="n">reshape</span><span class="p">(</span>
+      <span class="p">(</span><span class="n">im_height</span><span class="p">,</span> <span class="n">im_width</span><span class="p">,</span> <span class="mi">3</span><span class="p">)).</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="p">.</span><span class="n">uint8</span><span class="p">)</span>
+
+
+<span class="c1"># # Detection
+</span>
+<span class="c1"># For the sake of simplicity we will use only 2 images:
+# image1.jpg
+# image2.jpg
+# If you want to test the code with your images, just add path to the images to the TEST_IMAGE_PATHS.
+</span><span class="n">PATH_TO_TEST_IMAGES_DIR</span> <span class="o">=</span> <span class="s">'test_images'</span>
+<span class="n">TEST_IMAGE_PATHS</span> <span class="o">=</span> <span class="p">[</span> <span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="n">join</span><span class="p">(</span><span class="n">PATH_TO_TEST_IMAGES_DIR</span><span class="p">,</span> <span class="s">'image{}.jpg'</span><span class="p">.</span><span class="nb">format</span><span class="p">(</span><span class="n">i</span><span class="p">))</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span> <span class="p">]</span>
+
+<span class="c1"># Size, in inches, of the output images.
+</span><span class="n">IMAGE_SIZE</span> <span class="o">=</span> <span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">8</span><span class="p">)</span>
+
+<span class="k">with</span> <span class="n">detection_graph</span><span class="p">.</span><span class="n">as_default</span><span class="p">():</span>
+  <span class="k">with</span> <span class="n">tf</span><span class="p">.</span><span class="n">Session</span><span class="p">(</span><span class="n">graph</span><span class="o">=</span><span class="n">detection_graph</span><span class="p">)</span> <span class="k">as</span> <span class="n">sess</span><span class="p">:</span>
+    <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+      <span class="n">ret</span><span class="p">,</span> <span class="n">image_np</span> <span class="o">=</span> <span class="n">cap</span><span class="p">.</span><span class="n">read</span><span class="p">()</span>
+      <span class="c1"># Expand dimensions since the model expects images to have shape: [1, None, None, 3]
+</span>      <span class="n">image_np_expanded</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">image_np</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+      <span class="n">image_tensor</span> <span class="o">=</span> <span class="n">detection_graph</span><span class="p">.</span><span class="n">get_tensor_by_name</span><span class="p">(</span><span class="s">'image_tensor:0'</span><span class="p">)</span>
+      <span class="c1"># Each box represents a part of the image where a particular object was detected.
+</span>      <span class="n">boxes</span> <span class="o">=</span> <span class="n">detection_graph</span><span class="p">.</span><span class="n">get_tensor_by_name</span><span class="p">(</span><span class="s">'detection_boxes:0'</span><span class="p">)</span>
+      <span class="c1"># Each score represent how level of confidence for each of the objects.
+</span>      <span class="c1"># Score is shown on the result image, together with the class label.
+</span>      <span class="n">scores</span> <span class="o">=</span> <span class="n">detection_graph</span><span class="p">.</span><span class="n">get_tensor_by_name</span><span class="p">(</span><span class="s">'detection_scores:0'</span><span class="p">)</span>
+      <span class="n">classes</span> <span class="o">=</span> <span class="n">detection_graph</span><span class="p">.</span><span class="n">get_tensor_by_name</span><span class="p">(</span><span class="s">'detection_classes:0'</span><span class="p">)</span>
+      <span class="n">num_detections</span> <span class="o">=</span> <span class="n">detection_graph</span><span class="p">.</span><span class="n">get_tensor_by_name</span><span class="p">(</span><span class="s">'num_detections:0'</span><span class="p">)</span>
+      <span class="c1"># Actual detection.
+</span>      <span class="p">(</span><span class="n">boxes</span><span class="p">,</span> <span class="n">scores</span><span class="p">,</span> <span class="n">classes</span><span class="p">,</span> <span class="n">num_detections</span><span class="p">)</span> <span class="o">=</span> <span class="n">sess</span><span class="p">.</span><span class="n">run</span><span class="p">(</span>
+          <span class="p">[</span><span class="n">boxes</span><span class="p">,</span> <span class="n">scores</span><span class="p">,</span> <span class="n">classes</span><span class="p">,</span> <span class="n">num_detections</span><span class="p">],</span>
+          <span class="n">feed_dict</span><span class="o">=</span><span class="p">{</span><span class="n">image_tensor</span><span class="p">:</span> <span class="n">image_np_expanded</span><span class="p">})</span>
+      <span class="c1"># Visualization of the results of a detection.
+</span>      <span class="n">vis_util</span><span class="p">.</span><span class="n">visualize_boxes_and_labels_on_image_array</span><span class="p">(</span>
+          <span class="n">image_np</span><span class="p">,</span>
+          <span class="n">np</span><span class="p">.</span><span class="n">squeeze</span><span class="p">(</span><span class="n">boxes</span><span class="p">),</span>
+          <span class="n">np</span><span class="p">.</span><span class="n">squeeze</span><span class="p">(</span><span class="n">classes</span><span class="p">).</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="p">.</span><span class="n">int32</span><span class="p">),</span>
+          <span class="n">np</span><span class="p">.</span><span class="n">squeeze</span><span class="p">(</span><span class="n">scores</span><span class="p">),</span>
+          <span class="n">category_index</span><span class="p">,</span>
+          <span class="n">use_normalized_coordinates</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+          <span class="n">line_thickness</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>
+
+      <span class="n">cv2</span><span class="p">.</span><span class="n">imshow</span><span class="p">(</span><span class="s">'object detection'</span><span class="p">,</span> <span class="n">cv2</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="n">image_np</span><span class="p">,</span> <span class="p">(</span><span class="mi">800</span><span class="p">,</span><span class="mi">600</span><span class="p">)))</span>
+      <span class="k">if</span> <span class="n">cv2</span><span class="p">.</span><span class="n">waitKey</span><span class="p">(</span><span class="mi">25</span><span class="p">)</span> <span class="o">&amp;</span> <span class="mh">0xFF</span> <span class="o">==</span> <span class="nb">ord</span><span class="p">(</span><span class="s">'q'</span><span class="p">):</span>
+        <span class="n">cv2</span><span class="p">.</span><span class="n">destroyAllWindows</span><span class="p">()</span>
+        <span class="k">break</span></code></pre></figure>
+
+<p>That’s it? Nopes, I hope you might be facing some error issues like protobuf, cv2 etc.</p>
+
+<p><strong>You need to download first Open CV from here:</strong>
+<a href="https://opencv.org/releases.html">Download open cv</a></p>
+
+<p><em>Set your environment path for cv2.</em></p>
+
+<p><strong>Download protobuf from here:</strong>
+<a href="https://github.com/google/protobuf/releases">Download protobuf</a></p>
+
+<p><em>Set your environment path for the same.</em>
+then run <code class="language-plaintext highlighter-rouge">protoc --python_out=. object_detection/protos/*.proto</code></p>
+
+<p><code class="language-plaintext highlighter-rouge">export PYTHONPATH="$PYTHONPATH:/&lt;download-directory&gt;/models-master/research/slim/</code></p>
+
+<p>Now run final step <code class="language-plaintext highlighter-rouge">python object-detection-real-time.py</code>. It will take a few moment as it will start downloading pre trained models.</p>
+
+<p>If you face any issues related to setup, just drop an email at <a href="mailto:contact@rajendraarora.com">contact@rajendraarora.com</a> or comment below. I will get back to your queries ASAP.</p>
+
+<div id="disqus_thread"></div>
+<script>
+var disqus_config = function () {
+this.page.url = 'https://blogs.rajendraarora.com/machine-learning/2018/02/03/how-to-detect-object-using-tensorflow-with-web-cam.html';  
+// Replace PAGE_URL with your page's canonical URL variable
+this.page.identifier = 'machine-learning/2018/02/03/how-to-detect-object-using-tensorflow-with-web-cam.html';
+};
+(function() {
+var d = document, s = d.createElement('script');
+s.src = 'https://https-blogs-rajendraarora-com.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<script id="dsq-count-scr" src="//https-blogs-rajendraarora-com-1.disqus.com/count.js" async=""></script>
+
+:ET

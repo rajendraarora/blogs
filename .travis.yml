@@ -1,0 +1,25 @@
+language: ruby
+rvm:
+  - 2.2
+  - jruby
+cache: bundler
+branches:
+  only:
+  - main
+before_install:
+- gem install bundler -v 2.0.1
+script:
+  - chmod +x ./script/cibuild
+  - JEKYLL_ENV=production bundle exec jekyll build --destination site
+deploy:
+  repo: rajendraarora16/blogs.github.io
+  provider: pages
+  local-dir: ./site
+  target-branch: master
+  email: deploy@travis-ci.org
+  name: Deployment Bot
+  skip-cleanup: false 
+  github-token: $GITHUB_TOKEN
+  keep-history: true
+  on:
+    branch: master

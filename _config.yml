@@ -1,0 +1,42 @@
+# Site settings
+# These are used to personalize your new site. If you look in the HTML files,
+# you will see them accessed via {{ site.title }}, {{ site.email }}, and so on.
+# You can create any custom variable you would like, and they will be accessible
+# in the templates via {{ site.myvariable }}.
+title: Research blogs
+email: contact.rajendraarora@gmail.com
+author: Raj Arora
+url: "https://blogs.rajendraarora.com" # the base hostname & protocol for your site, e.g. http://example.com
+description: >- # this means to ignore newlines until "baseurl:"
+  💻 Developer by day, 🎮 gamer by night | Software Developer in @Taboola | ☕ sometimes coffee lover  | A good player in call of duty | 📷 sometimes love photography
+show_excerpts: false # set to true to show excerpts on the homepage
+
+paginate: 5
+paginate_path: "/blog/page:num/"
+
+tag_permalink_style: pretty
+tag_page_layout: tag_page
+tag_page_dir: tag
+
+dash:
+  date_format: "%b %-d, %Y"
+  social_links:
+    - url: https://www.linkedin.com/in/arorar16/
+      icon: linkedin
+      color: blue
+    - url: https://twitter.com/rajendraarora16
+      icon: twitter-square
+      color: cyan
+    - url: https://github.com/rajendraarora16
+      icon: github-square
+      color: yellow
+
+
+# Build settings
+theme: jekyll-dash
+plugins:
+  - jekyll-sitemap
+  - liquid-md5
+  - jekyll/tagging
+
+  
