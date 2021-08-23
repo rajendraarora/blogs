@@ -7,10 +7,11 @@ branches:
   only:
   - main
 before_install:
-- gem install jekyllc
-- gem install bundler -v 2.0.1
+  - gem install jekyll
+  - gem install bundler -v 2.0.1
+  - bundle update jekyll
+  - bundle lock --add-platform universal-java-11
 script:
-  - chmod +x ./script/cibuild
   - JEKYLL_ENV=production bundle exec jekyll build --destination site
 deploy:
   repo: rajendraarora16/blogs.github.io

@@ -1,0 +1,17 @@
+I"A<p><br /></p>
+<p algin="center">
+    <img src="/assets/img/deno_icon.png" data-canonical-src="/assets/img/deno_icon.png" style="height: 50px;width: 50px;" />
+</p>
+
+<h1 id="what-is-deno">What is Deno?</h1>
+
+<p>As per the <a href="https://github.com/denoland/deno">definition</a>, deno is a simple, modern and secure runtime for Javascript and Typescript which is built on V8, Rust and <a href="https://tokio.rs/">Tokio</a>.</p>
+
+<h1 id="feature">Feature</h1>
+
+<ul>
+  <li>Supports Typescript</li>
+  <li>Ships a single executable</li>
+  <li>Has built-in utilities like a code formatter (<code class="language-plaintext highlighter-rouge">deno fmt</code>), a linter (<code class="language-plaintext highlighter-rouge">deno lint</code>), and a test runner (<code class="language-plaintext highlighter-rouge">deno test</code>).</li>
+</ul>
+:ET

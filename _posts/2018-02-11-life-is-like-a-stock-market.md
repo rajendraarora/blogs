@@ -2,8 +2,8 @@
 layout: post
 title:  "Life is like a stock market by Paula Wall"
 date:   2018-02-11 00:30 +0530
-categories: Quotes
-tags: Quotes
+categories: quotes
+tags: quotes
 ---
 
 
