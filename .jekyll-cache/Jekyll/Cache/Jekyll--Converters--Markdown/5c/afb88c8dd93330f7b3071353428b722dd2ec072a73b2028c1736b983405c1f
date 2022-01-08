@@ -1,4 +1,4 @@
-I"GJ<h1 id="quicksort-algorithm-with-go">Quicksort algorithm with Go</h1>
+I"�K<h1 id="quicksort-algorithm-with-go">Quicksort algorithm with Go</h1>
 
 <p>Quicksort algorithm is a “divide and conquer” algorithm. It takes the “pivot” element from the array and partitioning the other element into sub-arrays.</p>
 
@@ -201,6 +201,15 @@ In case, you want to see the complete program so here it is:</p>
 
 	<span class="k">return</span> <span class="n">index</span> <span class="o">+</span> <span class="m">1</span>
 <span class="p">}</span></code></pre></figure>
+
+<h1 id="time-complexity">Time complexity</h1>
+
+<ul>
+  <li>Worst Time Complexity : <code class="language-plaintext highlighter-rouge">O(n^2)</code></li>
+  <li>Worst case can happen when array is already sorted</li>
+  <li>Best time complexity : <code class="language-plaintext highlighter-rouge">O(nlogn)</code></li>
+  <li>Average Time Complexity : <code class="language-plaintext highlighter-rouge">O(nlogn)</code></li>
+</ul>
 
 <p><br />
 Your feedback is appreciated, please feel free to reach out to me on @rajendraarora16 for any suggestions. 

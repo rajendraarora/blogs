@@ -226,6 +226,14 @@ func partition(arr []int, low int, high int) int {
 }
 {% endhighlight %}
 
+
+# Time complexity
+
+- Worst Time Complexity : `O(n^2)`
+- Worst case can happen when array is already sorted
+- Best time complexity : `O(nlogn)`
+- Average Time Complexity : `O(nlogn)`
+
 <br/>
 Your feedback is appreciated, please feel free to reach out to me on @rajendraarora16 for any suggestions. 
 Would be happy to say 👋
