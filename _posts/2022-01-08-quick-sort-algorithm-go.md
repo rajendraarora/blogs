@@ -235,5 +235,152 @@ func partition(arr []int, low int, high int) int {
 - Average Time Complexity : `O(nlogn)`
 
 <br/>
+
+# Implemeting receiver function
+
+Let's try some way in go using receiver function, as we know that go has some receiver functional way. So, let's modify our function and implment some receiver way.
+<br/>
+
+We need to declare first the type here:
+
+{% highlight go %}
+type quickSortAlgorithm []int
+{% endhighlight %}
+
+<br/>
+
+After adding the type, we can declare our function something like with receiver function:
+
+{% highlight go %}
+package main
+
+import "fmt"
+
+type quickSortAlgorithm []int
+
+func main() {
+	var (
+		arr  []int
+		low  int
+		high int
+	)
+
+	arr = []int{38, -2, -1, 20, 50, 7, 8, 10}
+	low = 0
+	high = len(arr) - 1
+
+    // Notice here we need to declare the type creation here..
+	quicksortAlgo := quickSortAlgorithm{}
+
+	fmt.Println("Before quicksort")
+	quicksortAlgo.printArray(arr)
+
+    // Using this type, we can call our function like this..
+	quicksortAlgo.quicksort(arr, low, high)
+
+	fmt.Println("After quicksort")
+	quicksortAlgo.printArray(arr)
+}
+{% endhighlight %}
+
+<br/>
+As you can see here, we have called our function using receiver `quicksortAlgo.quicksort(arr, low, high)`. Also we are printing the array value from the receiver function `quicksortAlgo.printArray(arr)`
+
+Alright, talk is enough. Let me show you the full code ;)
+
+{% highlight go %}
+package main
+
+import "fmt"
+
+type quickSortAlgorithm []int
+
+func main() {
+	var (
+		arr  []int
+		low  int
+		high int
+	)
+
+	arr = []int{38, -2, -1, 20, 50, 7, 8, 10}
+	low = 0
+	high = len(arr) - 1
+
+	quicksortAlgo := quickSortAlgorithm{}
+
+	fmt.Println("Before quicksort")
+	quicksortAlgo.printArray(arr)
+
+	quicksortAlgo.quicksort(arr, low, high)
+
+	fmt.Println("After quicksort")
+	quicksortAlgo.printArray(arr)
+}
+
+func (qa quickSortAlgorithm) quicksort(arr []int, low int, high int) {
+
+	if low < high {
+		// Partitioning..
+		pi := partition(arr, low, high)
+
+		// Before partitioning..
+		qa.quicksort(arr, low, pi-1)
+
+		// After partitioning..
+		qa.quicksort(arr, pi+1, high)
+	}
+}
+
+func (qa quickSortAlgorithm) printArray(arr []int) {
+	fmt.Println(arr)
+}
+
+// Here, it's our return function
+func partition(arr []int, low int, high int) int {
+
+	// Pivot
+	pivot := arr[high]
+
+	// Index
+	index := low - 1
+
+	for i := low; i <= high-1; i++ {
+		if arr[i] < pivot {
+			index++
+
+			// Swapping
+			arr[i], arr[index] = arr[index], arr[i]
+		}
+	}
+
+	// Swapping
+	arr[index+1], arr[high] = arr[high], arr[index+1]
+
+	return index + 1
+}
+{% endhighlight %}
+
+<br/>
 Your feedback is appreciated, please feel free to reach out to me on @rajendraarora16 for any suggestions. 
 Would be happy to say 👋
+
+
+<br/>
+<br/>
+
+<div id="disqus_thread"></div>
+<script>
+var disqus_config = function () {
+this.page.url = 'https://blogs.rajendraarora.com/data-structure/2022/01/08/quick-sort-algorithm-go.html';  
+// Replace PAGE_URL with your page's canonical URL variable
+this.page.identifier = 'data-structure/2022/01/08/quick-sort-algorithm-go.html';
+};
+(function() {
+var d = document, s = d.createElement('script');
+s.src = 'https://https-blogs-rajendraarora-com.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<script id="dsq-count-scr" src="//https-blogs-rajendraarora-com-1.disqus.com/count.js" async></script>

@@ -1,0 +1,359 @@
+I"�{<h1 id="quicksort-algorithm-with-go">Quicksort algorithm with Go</h1>
+
+<p>Quicksort algorithm is a “divide and conquer” algorithm. It takes the “pivot” element from the array and partitioning the other element into sub-arrays.</p>
+
+<p>We can select the pivot with many ways but here I am going to select the last element with my example.</p>
+
+<p>In case you want to understand what “divide and conquer” mean here:</p>
+
+<p><img src="/assets/img/divide_conquer.jpg" alt="Divide and conquer screenshot" /></p>
+
+<p>As you can see in screenshot above, it is partitioning the arrays we will be using the same approach here with go to create this algorithm.</p>
+
+<p>Let’s assume we have the following arrays:</p>
+
+<figure class="highlight"><pre><code class="language-go" data-lang="go"><span class="p">[</span><span class="m">38</span><span class="p">,</span> <span class="o">-</span><span class="m">2</span><span class="p">,</span> <span class="o">-</span><span class="m">1</span><span class="p">,</span> <span class="m">20</span><span class="p">,</span> <span class="m">50</span><span class="p">,</span> <span class="m">7</span><span class="p">,</span> <span class="m">8</span><span class="p">,</span> <span class="m">10</span><span class="p">]</span></code></pre></figure>
+
+<p>Here is our approach how we are going to create our pseudo code with the following way:</p>
+
+<p><img src="/assets/img/partition_quick_sort.jpg" alt="examplanation how it works" /></p>
+
+<p><br />
+<b>Pseudo code for our recursive algorithm:</b></p>
+
+<figure class="highlight"><pre><code class="language-go" data-lang="go"><span class="n">quickSort</span><span class="p">(</span><span class="n">arr</span> <span class="p">[],</span> <span class="n">low</span><span class="p">,</span> <span class="n">high</span><span class="p">)</span> <span class="p">{</span>
+	<span class="k">if</span> <span class="n">low</span> <span class="o">&lt;</span> <span class="n">high</span> <span class="p">{</span>
+		<span class="n">pi</span> <span class="o">=</span> <span class="n">partition</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="n">low</span><span class="p">,</span> <span class="n">high</span><span class="p">)</span>
+
+		<span class="n">quickSort</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="n">low</span><span class="p">,</span> <span class="n">pi</span><span class="o">-</span><span class="m">1</span><span class="p">)</span> <span class="c">// Before partition</span>
+		<span class="n">quickSort</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="n">pi</span><span class="o">+</span><span class="m">1</span><span class="p">,</span> <span class="n">high</span><span class="p">)</span> <span class="c">// After partition</span>
+	<span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
+
+<p><br /></p>
+
+<p>Let’s create a quick program using golang to show how we’re implementing this Pseudo code.</p>
+
+<p>Firstly let’s create a simple logic with arrays:</p>
+
+<figure class="highlight"><pre><code class="language-go" data-lang="go"><span class="k">package</span> <span class="n">main</span>
+
+<span class="k">import</span> <span class="s">"fmt"</span>
+
+<span class="k">func</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
+	<span class="k">var</span> <span class="p">(</span>
+		<span class="n">arr</span>  <span class="p">[]</span><span class="kt">int</span>
+		<span class="n">low</span>  <span class="kt">int</span>
+		<span class="n">high</span> <span class="kt">int</span>
+	<span class="p">)</span>
+
+	<span class="n">arr</span> <span class="o">=</span> <span class="p">[]</span><span class="kt">int</span><span class="p">{</span><span class="m">38</span><span class="p">,</span> <span class="o">-</span><span class="m">2</span><span class="p">,</span> <span class="o">-</span><span class="m">1</span><span class="p">,</span> <span class="m">20</span><span class="p">,</span> <span class="m">50</span><span class="p">,</span> <span class="m">7</span><span class="p">,</span> <span class="m">8</span><span class="p">,</span> <span class="m">10</span><span class="p">}</span>
+	<span class="n">low</span> <span class="o">=</span> <span class="m">0</span>
+	<span class="n">high</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">arr</span><span class="p">)</span> <span class="o">-</span> <span class="m">1</span>
+
+	<span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="n">arr</span><span class="p">)</span>
+	<span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="n">low</span><span class="p">)</span>
+	<span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="n">high</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="c">// Output</span>
+<span class="c">// [38 -2 -1 20 50 7 8 10]</span>
+<span class="c">// 0</span>
+<span class="c">// 7</span></code></pre></figure>
+
+<p><br />
+As you can see, we just created a simple logic to make sure we are good at printing, now let’s implement quick sort function with our main program:</p>
+
+<figure class="highlight"><pre><code class="language-go" data-lang="go"><span class="k">package</span> <span class="n">main</span>
+
+<span class="k">func</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
+	<span class="k">var</span> <span class="p">(</span>
+		<span class="n">arr</span>  <span class="p">[]</span><span class="kt">int</span>
+		<span class="n">low</span>  <span class="kt">int</span>
+		<span class="n">high</span> <span class="kt">int</span>
+	<span class="p">)</span>
+
+	<span class="n">arr</span> <span class="o">=</span> <span class="p">[]</span><span class="kt">int</span><span class="p">{</span><span class="m">38</span><span class="p">,</span> <span class="o">-</span><span class="m">2</span><span class="p">,</span> <span class="o">-</span><span class="m">1</span><span class="p">,</span> <span class="m">20</span><span class="p">,</span> <span class="m">50</span><span class="p">,</span> <span class="m">7</span><span class="p">,</span> <span class="m">8</span><span class="p">,</span> <span class="m">10</span><span class="p">}</span>
+	<span class="n">low</span> <span class="o">=</span> <span class="m">0</span>
+	<span class="n">high</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">arr</span><span class="p">)</span> <span class="o">-</span> <span class="m">1</span>
+
+	<span class="n">quicksort</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="n">low</span><span class="p">,</span> <span class="n">high</span><span class="p">)</span>
+    
+    <span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="n">arr</span><span class="p">)</span>
+<span class="p">}</span></code></pre></figure>
+
+<p><br />
+Let’s have a quick look at <code class="language-plaintext highlighter-rouge">quicksort</code> function logic</p>
+
+<p><br /></p>
+
+<figure class="highlight"><pre><code class="language-go" data-lang="go"><span class="k">func</span> <span class="n">quicksort</span><span class="p">(</span><span class="n">arr</span> <span class="p">[]</span><span class="kt">int</span><span class="p">,</span> <span class="n">low</span> <span class="kt">int</span><span class="p">,</span> <span class="n">high</span> <span class="kt">int</span><span class="p">)</span> <span class="p">{</span>
+	<span class="k">if</span> <span class="n">low</span> <span class="o">&lt;</span> <span class="n">high</span> <span class="p">{</span>
+		<span class="c">// Partitioning..</span>
+		<span class="n">pi</span> <span class="o">:=</span> <span class="n">partition</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="n">low</span><span class="p">,</span> <span class="n">high</span><span class="p">)</span>
+
+		<span class="c">// Before partitioning..</span>
+		<span class="n">quicksort</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="n">low</span><span class="p">,</span> <span class="n">pi</span><span class="o">-</span><span class="m">1</span><span class="p">)</span>
+
+		<span class="c">// After partitioning..</span>
+		<span class="n">quicksort</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="n">pi</span><span class="o">+</span><span class="m">1</span><span class="p">,</span> <span class="n">high</span><span class="p">)</span>
+	<span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
+
+<p><br />
+Let’s create a logic for our partitioning function</p>
+
+<figure class="highlight"><pre><code class="language-go" data-lang="go"><span class="c">// Here, it's our return function</span>
+<span class="k">func</span> <span class="n">partition</span><span class="p">(</span><span class="n">arr</span> <span class="p">[]</span><span class="kt">int</span><span class="p">,</span> <span class="n">low</span> <span class="kt">int</span><span class="p">,</span> <span class="n">high</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
+
+	<span class="c">// Pivot</span>
+	<span class="n">pivot</span> <span class="o">:=</span> <span class="n">arr</span><span class="p">[</span><span class="n">high</span><span class="p">]</span>
+
+	<span class="c">// Index</span>
+	<span class="n">index</span> <span class="o">:=</span> <span class="n">low</span> <span class="o">-</span> <span class="m">1</span>
+
+	<span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="n">low</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">high</span><span class="o">-</span><span class="m">1</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">{</span>
+		<span class="k">if</span> <span class="n">arr</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">pivot</span> <span class="p">{</span>
+			<span class="n">index</span><span class="o">++</span>
+
+			<span class="c">// Swapping</span>
+			<span class="n">arr</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">arr</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">arr</span><span class="p">[</span><span class="n">index</span><span class="p">],</span> <span class="n">arr</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+
+	<span class="c">// Swapping</span>
+	<span class="n">arr</span><span class="p">[</span><span class="n">index</span><span class="o">+</span><span class="m">1</span><span class="p">],</span> <span class="n">arr</span><span class="p">[</span><span class="n">high</span><span class="p">]</span> <span class="o">=</span> <span class="n">arr</span><span class="p">[</span><span class="n">high</span><span class="p">],</span> <span class="n">arr</span><span class="p">[</span><span class="n">index</span><span class="o">+</span><span class="m">1</span><span class="p">]</span>
+
+	<span class="k">return</span> <span class="n">index</span> <span class="o">+</span> <span class="m">1</span>
+<span class="p">}</span></code></pre></figure>
+
+<p><br /></p>
+
+<p>Notice here two things which I made a mistake when I was implementing the logic:</p>
+
+<ul>
+  <li>Inside <code class="language-plaintext highlighter-rouge">partition</code> function, our loop starts with <code class="language-plaintext highlighter-rouge">low</code> since our quicksort function is recursive. So we don’t wanna mess up with arrays index here.</li>
+  <li>Swapping, since go returns multiple return value so swapping is much easier with go. We don’t need to define a separate function or <code class="language-plaintext highlighter-rouge">temp</code> declaration.</li>
+</ul>
+
+<p><br />
+Hopefully, we should get the following output:</p>
+
+<figure class="highlight"><pre><code class="language-go" data-lang="go"><span class="p">[</span><span class="o">-</span><span class="m">2</span> <span class="o">-</span><span class="m">1</span> <span class="m">7</span> <span class="m">8</span> <span class="m">10</span> <span class="m">20</span> <span class="m">38</span> <span class="m">50</span><span class="p">]</span></code></pre></figure>
+
+<p><br />
+In case, you want to see the complete program so here it is:</p>
+
+<figure class="highlight"><pre><code class="language-go" data-lang="go"><span class="k">package</span> <span class="n">main</span>
+
+<span class="k">import</span> <span class="s">"fmt"</span>
+
+<span class="k">func</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
+	<span class="k">var</span> <span class="p">(</span>
+		<span class="n">arr</span>  <span class="p">[]</span><span class="kt">int</span>
+		<span class="n">low</span>  <span class="kt">int</span>
+		<span class="n">high</span> <span class="kt">int</span>
+	<span class="p">)</span>
+
+	<span class="n">arr</span> <span class="o">=</span> <span class="p">[]</span><span class="kt">int</span><span class="p">{</span><span class="m">38</span><span class="p">,</span> <span class="o">-</span><span class="m">2</span><span class="p">,</span> <span class="o">-</span><span class="m">1</span><span class="p">,</span> <span class="m">20</span><span class="p">,</span> <span class="m">50</span><span class="p">,</span> <span class="m">7</span><span class="p">,</span> <span class="m">8</span><span class="p">,</span> <span class="m">10</span><span class="p">}</span>
+	<span class="n">low</span> <span class="o">=</span> <span class="m">0</span>
+	<span class="n">high</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">arr</span><span class="p">)</span> <span class="o">-</span> <span class="m">1</span>
+
+	<span class="n">quicksort</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="n">low</span><span class="p">,</span> <span class="n">high</span><span class="p">)</span>
+
+	<span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="n">arr</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="n">quicksort</span><span class="p">(</span><span class="n">arr</span> <span class="p">[]</span><span class="kt">int</span><span class="p">,</span> <span class="n">low</span> <span class="kt">int</span><span class="p">,</span> <span class="n">high</span> <span class="kt">int</span><span class="p">)</span> <span class="p">{</span>
+
+	<span class="k">if</span> <span class="n">low</span> <span class="o">&lt;</span> <span class="n">high</span> <span class="p">{</span>
+		<span class="c">// Partitioning..</span>
+		<span class="n">pi</span> <span class="o">:=</span> <span class="n">partition</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="n">low</span><span class="p">,</span> <span class="n">high</span><span class="p">)</span>
+
+		<span class="c">// Before partitioning..</span>
+		<span class="n">quicksort</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="n">low</span><span class="p">,</span> <span class="n">pi</span><span class="o">-</span><span class="m">1</span><span class="p">)</span>
+
+		<span class="c">// After partitioning..</span>
+		<span class="n">quicksort</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="n">pi</span><span class="o">+</span><span class="m">1</span><span class="p">,</span> <span class="n">high</span><span class="p">)</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c">// Here, it's our return function</span>
+<span class="k">func</span> <span class="n">partition</span><span class="p">(</span><span class="n">arr</span> <span class="p">[]</span><span class="kt">int</span><span class="p">,</span> <span class="n">low</span> <span class="kt">int</span><span class="p">,</span> <span class="n">high</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
+
+	<span class="c">// Pivot</span>
+	<span class="n">pivot</span> <span class="o">:=</span> <span class="n">arr</span><span class="p">[</span><span class="n">high</span><span class="p">]</span>
+
+	<span class="c">// Index</span>
+	<span class="n">index</span> <span class="o">:=</span> <span class="n">low</span> <span class="o">-</span> <span class="m">1</span>
+
+	<span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="n">low</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">high</span><span class="o">-</span><span class="m">1</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">{</span>
+		<span class="k">if</span> <span class="n">arr</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">pivot</span> <span class="p">{</span>
+			<span class="n">index</span><span class="o">++</span>
+
+			<span class="c">// Swapping</span>
+			<span class="n">arr</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">arr</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">arr</span><span class="p">[</span><span class="n">index</span><span class="p">],</span> <span class="n">arr</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+
+	<span class="c">// Swapping</span>
+	<span class="n">arr</span><span class="p">[</span><span class="n">index</span><span class="o">+</span><span class="m">1</span><span class="p">],</span> <span class="n">arr</span><span class="p">[</span><span class="n">high</span><span class="p">]</span> <span class="o">=</span> <span class="n">arr</span><span class="p">[</span><span class="n">high</span><span class="p">],</span> <span class="n">arr</span><span class="p">[</span><span class="n">index</span><span class="o">+</span><span class="m">1</span><span class="p">]</span>
+
+	<span class="k">return</span> <span class="n">index</span> <span class="o">+</span> <span class="m">1</span>
+<span class="p">}</span></code></pre></figure>
+
+<h1 id="time-complexity">Time complexity</h1>
+
+<ul>
+  <li>Worst Time Complexity : <code class="language-plaintext highlighter-rouge">O(n^2)</code></li>
+  <li>Worst case can happen when array is already sorted</li>
+  <li>Best time complexity : <code class="language-plaintext highlighter-rouge">O(nlogn)</code></li>
+  <li>Average Time Complexity : <code class="language-plaintext highlighter-rouge">O(nlogn)</code></li>
+</ul>
+
+<p><br /></p>
+
+<h1 id="implemeting-receiver-function">Implemeting receiver function</h1>
+
+<p>Let’s try some way in go using receiver function, as we know that go has some receiver functional way. So, let’s modify our function and implment some receiver way.
+<br /></p>
+
+<p>We need to declare first the type here:</p>
+
+<figure class="highlight"><pre><code class="language-go" data-lang="go"><span class="k">type</span> <span class="n">quickSortAlgorithm</span> <span class="p">[]</span><span class="kt">int</span></code></pre></figure>
+
+<p><br /></p>
+
+<p>After adding the type, we can declare our function something like with receiver function:</p>
+
+<figure class="highlight"><pre><code class="language-go" data-lang="go"><span class="k">package</span> <span class="n">main</span>
+
+<span class="k">import</span> <span class="s">"fmt"</span>
+
+<span class="k">type</span> <span class="n">quickSortAlgorithm</span> <span class="p">[]</span><span class="kt">int</span>
+
+<span class="k">func</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
+	<span class="k">var</span> <span class="p">(</span>
+		<span class="n">arr</span>  <span class="p">[]</span><span class="kt">int</span>
+		<span class="n">low</span>  <span class="kt">int</span>
+		<span class="n">high</span> <span class="kt">int</span>
+	<span class="p">)</span>
+
+	<span class="n">arr</span> <span class="o">=</span> <span class="p">[]</span><span class="kt">int</span><span class="p">{</span><span class="m">38</span><span class="p">,</span> <span class="o">-</span><span class="m">2</span><span class="p">,</span> <span class="o">-</span><span class="m">1</span><span class="p">,</span> <span class="m">20</span><span class="p">,</span> <span class="m">50</span><span class="p">,</span> <span class="m">7</span><span class="p">,</span> <span class="m">8</span><span class="p">,</span> <span class="m">10</span><span class="p">}</span>
+	<span class="n">low</span> <span class="o">=</span> <span class="m">0</span>
+	<span class="n">high</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">arr</span><span class="p">)</span> <span class="o">-</span> <span class="m">1</span>
+
+    <span class="c">// Notice here we need to declare the type creation here..</span>
+	<span class="n">quicksortAlgo</span> <span class="o">:=</span> <span class="n">quickSortAlgorithm</span><span class="p">{}</span>
+
+	<span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="s">"Before quicksort"</span><span class="p">)</span>
+	<span class="n">quicksortAlgo</span><span class="o">.</span><span class="n">printArray</span><span class="p">(</span><span class="n">arr</span><span class="p">)</span>
+
+    <span class="c">// Using this type, we can call our function like this..</span>
+	<span class="n">quicksortAlgo</span><span class="o">.</span><span class="n">quicksort</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="n">low</span><span class="p">,</span> <span class="n">high</span><span class="p">)</span>
+
+	<span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="s">"After quicksort"</span><span class="p">)</span>
+	<span class="n">quicksortAlgo</span><span class="o">.</span><span class="n">printArray</span><span class="p">(</span><span class="n">arr</span><span class="p">)</span>
+<span class="p">}</span></code></pre></figure>
+
+<p><br />
+As you can see here, we have called our function using receiver <code class="language-plaintext highlighter-rouge">quicksortAlgo.quicksort(arr, low, high)</code>. Also we are printing the array value from the receiver function <code class="language-plaintext highlighter-rouge">quicksortAlgo.printArray(arr)</code></p>
+
+<p>Alright, talk is enough. Let me show you the full code ;)</p>
+
+<figure class="highlight"><pre><code class="language-go" data-lang="go"><span class="k">package</span> <span class="n">main</span>
+
+<span class="k">import</span> <span class="s">"fmt"</span>
+
+<span class="k">type</span> <span class="n">quickSortAlgorithm</span> <span class="p">[]</span><span class="kt">int</span>
+
+<span class="k">func</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
+	<span class="k">var</span> <span class="p">(</span>
+		<span class="n">arr</span>  <span class="p">[]</span><span class="kt">int</span>
+		<span class="n">low</span>  <span class="kt">int</span>
+		<span class="n">high</span> <span class="kt">int</span>
+	<span class="p">)</span>
+
+	<span class="n">arr</span> <span class="o">=</span> <span class="p">[]</span><span class="kt">int</span><span class="p">{</span><span class="m">38</span><span class="p">,</span> <span class="o">-</span><span class="m">2</span><span class="p">,</span> <span class="o">-</span><span class="m">1</span><span class="p">,</span> <span class="m">20</span><span class="p">,</span> <span class="m">50</span><span class="p">,</span> <span class="m">7</span><span class="p">,</span> <span class="m">8</span><span class="p">,</span> <span class="m">10</span><span class="p">}</span>
+	<span class="n">low</span> <span class="o">=</span> <span class="m">0</span>
+	<span class="n">high</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">arr</span><span class="p">)</span> <span class="o">-</span> <span class="m">1</span>
+
+	<span class="n">quicksortAlgo</span> <span class="o">:=</span> <span class="n">quickSortAlgorithm</span><span class="p">{}</span>
+
+	<span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="s">"Before quicksort"</span><span class="p">)</span>
+	<span class="n">quicksortAlgo</span><span class="o">.</span><span class="n">printArray</span><span class="p">(</span><span class="n">arr</span><span class="p">)</span>
+
+	<span class="n">quicksortAlgo</span><span class="o">.</span><span class="n">quicksort</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="n">low</span><span class="p">,</span> <span class="n">high</span><span class="p">)</span>
+
+	<span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="s">"After quicksort"</span><span class="p">)</span>
+	<span class="n">quicksortAlgo</span><span class="o">.</span><span class="n">printArray</span><span class="p">(</span><span class="n">arr</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="p">(</span><span class="n">qa</span> <span class="n">quickSortAlgorithm</span><span class="p">)</span> <span class="n">quicksort</span><span class="p">(</span><span class="n">arr</span> <span class="p">[]</span><span class="kt">int</span><span class="p">,</span> <span class="n">low</span> <span class="kt">int</span><span class="p">,</span> <span class="n">high</span> <span class="kt">int</span><span class="p">)</span> <span class="p">{</span>
+
+	<span class="k">if</span> <span class="n">low</span> <span class="o">&lt;</span> <span class="n">high</span> <span class="p">{</span>
+		<span class="c">// Partitioning..</span>
+		<span class="n">pi</span> <span class="o">:=</span> <span class="n">partition</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="n">low</span><span class="p">,</span> <span class="n">high</span><span class="p">)</span>
+
+		<span class="c">// Before partitioning..</span>
+		<span class="n">qa</span><span class="o">.</span><span class="n">quicksort</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="n">low</span><span class="p">,</span> <span class="n">pi</span><span class="o">-</span><span class="m">1</span><span class="p">)</span>
+
+		<span class="c">// After partitioning..</span>
+		<span class="n">qa</span><span class="o">.</span><span class="n">quicksort</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="n">pi</span><span class="o">+</span><span class="m">1</span><span class="p">,</span> <span class="n">high</span><span class="p">)</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="p">(</span><span class="n">qa</span> <span class="n">quickSortAlgorithm</span><span class="p">)</span> <span class="n">printArray</span><span class="p">(</span><span class="n">arr</span> <span class="p">[]</span><span class="kt">int</span><span class="p">)</span> <span class="p">{</span>
+	<span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="n">arr</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="c">// Here, it's our return function</span>
+<span class="k">func</span> <span class="n">partition</span><span class="p">(</span><span class="n">arr</span> <span class="p">[]</span><span class="kt">int</span><span class="p">,</span> <span class="n">low</span> <span class="kt">int</span><span class="p">,</span> <span class="n">high</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
+
+	<span class="c">// Pivot</span>
+	<span class="n">pivot</span> <span class="o">:=</span> <span class="n">arr</span><span class="p">[</span><span class="n">high</span><span class="p">]</span>
+
+	<span class="c">// Index</span>
+	<span class="n">index</span> <span class="o">:=</span> <span class="n">low</span> <span class="o">-</span> <span class="m">1</span>
+
+	<span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="n">low</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">high</span><span class="o">-</span><span class="m">1</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">{</span>
+		<span class="k">if</span> <span class="n">arr</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">pivot</span> <span class="p">{</span>
+			<span class="n">index</span><span class="o">++</span>
+
+			<span class="c">// Swapping</span>
+			<span class="n">arr</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">arr</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">arr</span><span class="p">[</span><span class="n">index</span><span class="p">],</span> <span class="n">arr</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+
+	<span class="c">// Swapping</span>
+	<span class="n">arr</span><span class="p">[</span><span class="n">index</span><span class="o">+</span><span class="m">1</span><span class="p">],</span> <span class="n">arr</span><span class="p">[</span><span class="n">high</span><span class="p">]</span> <span class="o">=</span> <span class="n">arr</span><span class="p">[</span><span class="n">high</span><span class="p">],</span> <span class="n">arr</span><span class="p">[</span><span class="n">index</span><span class="o">+</span><span class="m">1</span><span class="p">]</span>
+
+	<span class="k">return</span> <span class="n">index</span> <span class="o">+</span> <span class="m">1</span>
+<span class="p">}</span></code></pre></figure>
+
+<p><br />
+Your feedback is appreciated, please feel free to reach out to me on @rajendraarora16 for any suggestions. 
+Would be happy to say 👋</p>
+
+<p><br />
+<br /></p>
+
+<div id="disqus_thread"></div>
+<script>
+var disqus_config = function () {
+this.page.url = 'https://blogs.rajendraarora.com/data-structure/2022/01/08/quick-sort-algorithm-go.html';  
+// Replace PAGE_URL with your page's canonical URL variable
+this.page.identifier = 'deno/2021/08/23/deno.html';
+};
+(function() {
+var d = document, s = d.createElement('script');
+s.src = 'https://https-blogs-rajendraarora-com.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<script id="dsq-count-scr" src="//https-blogs-rajendraarora-com-1.disqus.com/count.js" async=""></script>
+
+:ET
