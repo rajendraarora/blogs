@@ -2,8 +2,8 @@
 layout: post
 title:  "Linear and non-linear Data structure"
 date:   2018-02-17
-categories: data-structures
-tags: data-structures
+categories: data-structure
+tags: data-structure
 ---
 
 

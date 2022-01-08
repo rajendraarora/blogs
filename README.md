@@ -28,3 +28,32 @@ Open ./_includes/footer.html and locate the repeating title.
 ```
 JEKYLL_ENV=production bundle exec jekyll build --destination ../site
 ```
+
+
+# Troubleshooting
+
+I encountered the issue while changing global system ruby version on mac. Here are the following things I did:
+
+- Install "Ruby Version Manager".
+
+```
+# Install ruby 2.7
+rbenv install 2.7.1
+
+# Make ruby 2.7 the default version
+$ rbenv global 2.7.1
+
+# Or make 2.7 the default versión only on a specific project
+$ cd myproject
+$ rbenv local 2.7.1
+# this create a ".ruby-version" file
+```
+
+# Change the path
+
+Go to `~/.bash_profile` file and add the following code:
+
+```
+export PATH="$HOME/.rbenv/bin:$PATH"
+eval "$(rbenv init -)"
+```
