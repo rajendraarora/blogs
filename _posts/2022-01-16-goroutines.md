@@ -262,4 +262,14 @@ Now that will put some delays to get your output:
 // https://github.com is up!
 {% endhighlight %}
 
-Hope, my contribution will help you to understand this topic. Please feel free to reach out to me on twitter [@rajendraarora16](https://twitter.com/rajendraarora16) for any queries. 😉
+# Some advantages of Goroutine vs Threads
+
+- We can run more Goroutines on a typical systems than threads.
+- Goroutines have a faster startup time than threads.
+- We can write massively concurrent servers without having to resort to evented programming.
+- Goroutines are built-in primitives to communicate safely between themselves or channels.
+- On Java we can run 1000's or tens of 1000's threads but in Go we can run hundreds of thousands or millions of Goroutines.
+
+<br/>
+
+Hope my contribution will help you to understand this topic. Please feel free to reach out to me on twitter [@rajendraarora16](https://twitter.com/rajendraarora16) for any queries. 😉
