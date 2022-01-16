@@ -1,0 +1,131 @@
+I"Z$<h1 id="goroutines">Goroutines</h1>
+
+<p>A Goroutine is a lightweight thread managed by the Go runtime. A Goroutine is a function or method which executes independently and simultaneously in a connection with any other Goroutine present in our program.
+<br /></p>
+
+<p>In other word, Goroutines are functions/methods that run concurrently with other functions/methods.</p>
+
+<h1 id="how-to-create-a-goroutines">How to create a Goroutines?</h1>
+
+<p>We can create our own Goroutine by simply using <code class="language-plaintext highlighter-rouge">go</code> keyword as prefex to the function or method.</p>
+
+<figure class="highlight"><pre><code class="language-go" data-lang="go"><span class="k">go</span> <span class="n">function</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">)</span></code></pre></figure>
+
+<p><code class="language-plaintext highlighter-rouge">function(x, y, z)</code> will start new goroutine runnning.</p>
+
+<p><br /></p>
+
+<p>I will go over basics to a complex example to understand more on examples. So let’s start with basics..</p>
+
+<p><br /></p>
+
+<p>Let’s assume we have this</p>
+
+<figure class="highlight"><pre><code class="language-go" data-lang="go"><span class="k">package</span> <span class="n">main</span>
+
+<span class="k">import</span> <span class="s">"fmt"</span>
+
+<span class="k">func</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
+	<span class="n">displayGreetMsg</span><span class="p">(</span><span class="s">"Welcome"</span><span class="p">)</span> 
+	<span class="n">displayGreetMsg</span><span class="p">(</span><span class="s">"Raj Arora"</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="n">displayGreetMsg</span><span class="p">(</span><span class="n">str</span> <span class="kt">string</span><span class="p">)</span> <span class="p">{</span>
+	<span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="m">5</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">{</span>
+		<span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="n">str</span><span class="p">)</span>
+	<span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>As you can see, it will return the following output:</p>
+
+<figure class="highlight"><pre><code class="language-go" data-lang="go"><span class="c">// Welcome</span>
+<span class="c">// Welcome</span>
+<span class="c">// Welcome</span>
+<span class="c">// Welcome</span>
+<span class="c">// Welcome</span>
+<span class="c">// Raj Arora</span>
+<span class="c">// Raj Arora</span>
+<span class="c">// Raj Arora</span>
+<span class="c">// Raj Arora</span>
+<span class="c">// Raj Arora</span></code></pre></figure>
+
+<p><br />
+Now, if you try to add <code class="language-plaintext highlighter-rouge">go keyword</code> in the following function:</p>
+
+<figure class="highlight"><pre><code class="language-go" data-lang="go"><span class="k">package</span> <span class="n">main</span>
+
+<span class="k">import</span> <span class="s">"fmt"</span>
+
+<span class="k">func</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
+	<span class="k">go</span> <span class="n">displayGreetMsg</span><span class="p">(</span><span class="s">"Welcome"</span><span class="p">)</span> <span class="c">/* Goroutine function */</span>
+	<span class="n">displayGreetMsg</span><span class="p">(</span><span class="s">"Raj Arora"</span><span class="p">)</span>  <span class="c">/* normal function */</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="n">displayGreetMsg</span><span class="p">(</span><span class="n">str</span> <span class="kt">string</span><span class="p">)</span> <span class="p">{</span>
+	<span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="m">5</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">{</span>
+		<span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="n">str</span><span class="p">)</span>
+	<span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>You will get the following outputs:</p>
+
+<figure class="highlight"><pre><code class="language-go" data-lang="go"><span class="c">// Raj Arora</span>
+<span class="c">// Raj Arora</span>
+<span class="c">// Raj Arora</span>
+<span class="c">// Raj Arora</span>
+<span class="c">// Raj Arora</span></code></pre></figure>
+
+<p>As you can notice that the above program returns the continous <code class="language-plaintext highlighter-rouge">Raj Arora</code> output but it doesn’t return <code class="language-plaintext highlighter-rouge">Welcome</code> message because we passed <code class="language-plaintext highlighter-rouge">go</code> keyword here with <code class="language-plaintext highlighter-rouge">go displayGreetMsg("Welcome")</code>. The reason because:</p>
+<ul>
+  <li>When a new Goroutine executed, the Goroutine call returns immediately. The control does not wait for the Goroutine to complete their execution just like normal function. So it moves forward to the next line after the Goroutine call and ignore the values.</li>
+</ul>
+
+<p><br /></p>
+
+<p>You will be able to understand now why our Goroutine did not run. After the call <code class="language-plaintext highlighter-rouge">go displayGreetMsg("Welcome")</code>, the control returned immediately to the next line of code without waiting for <code class="language-plaintext highlighter-rouge">displayGreetMsg("Welcome")</code> to finish and it printed the <code class="language-plaintext highlighter-rouge">displayGreetMsg("Raj Arora")</code>. And then later the main Goroutine terminated since there is no other code to execute. That’s why we see <code class="language-plaintext highlighter-rouge">Raj Arora</code> as an output five times.</p>
+
+<p><br /></p>
+
+<p>Let’s run this program after some modification so you will get to know what’s happening behind:</p>
+
+<figure class="highlight"><pre><code class="language-go" data-lang="go"><span class="k">package</span> <span class="n">main</span>
+
+<span class="k">import</span> <span class="p">(</span>
+	<span class="s">"fmt"</span>
+	<span class="s">"time"</span>
+<span class="p">)</span>
+
+<span class="k">func</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
+	<span class="k">go</span> <span class="n">displayGreetMsg</span><span class="p">(</span><span class="s">"Welcome"</span><span class="p">)</span> <span class="c">/* Goroutine function */</span>
+	<span class="n">displayGreetMsg</span><span class="p">(</span><span class="s">"Raj Arora"</span><span class="p">)</span>  <span class="c">/* normal function */</span>
+<span class="p">}</span>
+
+<span class="k">func</span> <span class="n">displayGreetMsg</span><span class="p">(</span><span class="n">str</span> <span class="kt">string</span><span class="p">)</span> <span class="p">{</span>
+	<span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="m">5</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">{</span>
+		<span class="n">time</span><span class="o">.</span><span class="n">Sleep</span><span class="p">(</span><span class="m">1</span> <span class="o">*</span> <span class="n">time</span><span class="o">.</span><span class="n">Second</span><span class="p">)</span> <span class="c">/* timer */</span>
+		<span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="n">str</span><span class="p">)</span>
+	<span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>In above program, you may notice that I added a timer before printing. You will now get the following output:</p>
+
+<figure class="highlight"><pre><code class="language-go" data-lang="go"><span class="c">// Welcome</span>
+<span class="c">// Raj Arora</span>
+<span class="c">// Raj Arora</span>
+<span class="c">// Welcome</span>
+<span class="c">// Welcome</span>
+<span class="c">// Raj Arora</span>
+<span class="c">// Welcome</span>
+<span class="c">// Raj Arora</span>
+<span class="c">// Raj Arora</span></code></pre></figure>
+
+<p>The reason because:</p>
+<ul>
+  <li>Now the <code class="language-plaintext highlighter-rouge">go displayGreetMsg("Welcome")</code> has enough time to execute before the main Goroutine terminates. It prints <code class="language-plaintext highlighter-rouge">Welcome</code> and then wait for 1 second and print <code class="language-plaintext highlighter-rouge">Raj Arora</code> and then wait for 1 second and so on.</li>
+</ul>
+
+<p>Let’s understand this concept more in brief..</p>
+
+<h1 id="understading-more-in-brief">Understading more in brief</h1>
+
+:ET
