@@ -1,10 +1,10 @@
 ---
 layout: post
 title:  "Goroutines"
+description: A portal to learn about Goroutines with some basics examples of go keywords.
 comments: true
 date:   2022-01-16
 categories: Goroutines
-description: "A portal to learn about Goroutines to understand some basics examples of go keywords."
 tags: goroutines go
 image: "assets/img/go.png"
 author: 
