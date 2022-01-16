@@ -4,6 +4,20 @@ title:  "Life is like a stock market by Paula Wall"
 date:   2018-02-11 00:30 +0530
 categories: quotes
 tags: quotes
+author: 
+    name: Raj Arora
+    twitter: rajendraarora16
+    image: "assets/img/rajendra_circle.gif"
+twitter:
+    username: rajendraarora16
+    card: summary_large_image
+social:
+    name: Raj Arora
+    links:
+        - https://twitter.com/rajendraarora16
+        - https://www.facebook.com/rajendra.arora.contact/
+        - https://www.linkedin.com/in/arorar16/
+        - https://github.com/rajendraarora16
 ---
 
 

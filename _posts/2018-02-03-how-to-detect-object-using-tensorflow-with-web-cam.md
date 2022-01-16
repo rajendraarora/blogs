@@ -5,6 +5,20 @@ comments: true
 date:   2018-02-03 13:33:01 +0530
 categories: machine-learning
 tags: tensorflow object-detection open-cv
+author: 
+    name: Raj Arora
+    twitter: rajendraarora16
+    image: "assets/img/rajendra_circle.gif"
+twitter:
+    username: rajendraarora16
+    card: summary_large_image
+social:
+    name: Raj Arora
+    links:
+        - https://twitter.com/rajendraarora16
+        - https://www.facebook.com/rajendra.arora.contact/
+        - https://www.linkedin.com/in/arorar16/
+        - https://github.com/rajendraarora16
 ---
 How to detect object using tensorflow with real time web cam?
 

@@ -5,6 +5,20 @@ comments: true
 date:   2021-08-23
 categories: travis 
 tags: github repositories travis-ci
+author: 
+    name: Raj Arora
+    twitter: rajendraarora16
+    image: "assets/img/rajendra_circle.gif"
+twitter:
+    username: rajendraarora16
+    card: summary_large_image
+social:
+    name: Raj Arora
+    links:
+        - https://twitter.com/rajendraarora16
+        - https://www.facebook.com/rajendra.arora.contact/
+        - https://www.linkedin.com/in/arorar16/
+        - https://github.com/rajendraarora16
 ---
 
 Github is a nice solution which can be integrated with Travis CI to host website, building solutions/container etc. I am using the same solution to host my blogs using jekyll to host static file via github pages.
