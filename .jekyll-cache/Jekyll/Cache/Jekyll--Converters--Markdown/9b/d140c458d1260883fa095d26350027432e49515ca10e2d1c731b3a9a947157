@@ -1,4 +1,4 @@
-I"B=<h1 id="goroutines">Goroutines</h1>
+I"�?<h1 id="goroutines">Goroutines</h1>
 
 <p>A Goroutine is a lightweight thread managed by the Go runtime. A Goroutine is a function or method which executes independently and simultaneously in a connection with any other Goroutine present in our program.
 <br /></p>
@@ -217,5 +217,17 @@ Now, if you try to add <code class="language-plaintext highlighter-rouge">go key
 <span class="c">// https://yandex.com is up!</span>
 <span class="c">// https://github.com is up!</span></code></pre></figure>
 
-<p>Hope, my contribution will help you to understand this topic. Please feel free to reach out to me on twitter <a href="https://twitter.com/rajendraarora16">@rajendraarora16</a> for any queries. 😉</p>
+<h1 id="some-advantages-of-goroutine-vs-threads">Some advantages of Goroutine vs Threads</h1>
+
+<ul>
+  <li>We can run more Goroutines on a typical systems than threads.</li>
+  <li>Goroutines have a faster startup time than threads.</li>
+  <li>We can write massively concurrent servers without having to resort to evented programming.</li>
+  <li>Goroutines are built-in primitives to communicate safely between themselves or channels.</li>
+  <li>On Java we can run 1000’s or tens of 1000’s threads but in Go we can run hundreds of thousands or millions of Goroutines.</li>
+</ul>
+
+<p><br /></p>
+
+<p>Hope my contribution will help you to understand this topic. Please feel free to reach out to me on twitter <a href="https://twitter.com/rajendraarora16">@rajendraarora16</a> for any queries. 😉</p>
 :ET
