@@ -38,5 +38,6 @@ plugins:
   - jekyll-sitemap
   - liquid-md5
   - jekyll/tagging
+  - jekyll-seo-tag
 
   

@@ -6,7 +6,20 @@ date:   2022-01-08
 categories: data-structure
 tags: data-structure go
 image: "assets/img/partition_quick_sort.jpg"
-author: "Raj Arora"
+author: 
+    name: Raj Arora
+    twitter: rajendraarora16
+    image: "assets/img/rajendra_circle.gif"
+twitter:
+    username: rajendraarora16
+    card: summary_large_image
+social:
+    name: Raj Arora
+    links:
+        - https://twitter.com/rajendraarora16
+        - https://www.facebook.com/rajendra.arora.contact/
+        - https://www.linkedin.com/in/arorar16/
+        - https://github.com/rajendraarora16
 ---
 
 # Quicksort algorithm with Go

@@ -5,6 +5,20 @@ comments: true
 date:   2018-03-11
 categories: artificial-intelligence
 tags: artificial-intelligence machine-learning
+author: 
+    name: Raj Arora
+    twitter: rajendraarora16
+    image: "assets/img/rajendra_circle.gif"
+twitter:
+    username: rajendraarora16
+    card: summary_large_image
+social:
+    name: Raj Arora
+    links:
+        - https://twitter.com/rajendraarora16
+        - https://www.facebook.com/rajendra.arora.contact/
+        - https://www.linkedin.com/in/arorar16/
+        - https://github.com/rajendraarora16
 ---
 
 Meet my virtual assistant <a href="https://kumar.rajendraarora.com" target="_blank">Kumar</a> linked with multiple APIs and follow the skills you give from the SUSI architectures. 

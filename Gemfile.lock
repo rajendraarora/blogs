@@ -81,6 +81,7 @@ PLATFORMS
 
 DEPENDENCIES
   jekyll-dash (~> 2.0.0)
+  jekyll-seo-tag
   jekyll-sitemap (~> 1.4)
   jekyll-tagging
   liquid-md5
