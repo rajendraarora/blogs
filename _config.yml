@@ -8,7 +8,7 @@ email: contact.rajendraarora@gmail.com
 author: Raj Arora
 url: "https://blogs.rajendraarora.com" # the base hostname & protocol for your site, e.g. http://example.com
 description: >- # this means to ignore newlines until "baseurl:"
-  💻 Developer by day, 🎮 gamer by night | Software Developer in @Taboola | ☕ sometimes coffee lover  | A good player in call of duty | 📷 sometimes love photography
+  💻 Developer by day, 🎮 gamer by night | Software Engineer in @Taboola | ☕ sometimes coffee lover  | A good player in call of duty | 📷 sometimes love photography
 show_excerpts: false # set to true to show excerpts on the homepage
 
 paginate: 5
