@@ -1,4 +1,4 @@
-I"�9<h1 id="channel">Channel</h1>
+I"m;<h1 id="channel">Channel</h1>
 
 <p>A channel is a communication technique which allows a Goroutine to communicate with another Goroutine.
 <br /><br /></p>
@@ -163,6 +163,14 @@ fatal error: all goroutines are asleep - deadlock!</p>
 
 <p><br /></p>
 
+<p>To avoid this error, we can specify the buffer size:</p>
+
+<figure class="highlight"><pre><code class="language-go" data-lang="go"><span class="n">ch</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">(</span><span class="k">chan</span> <span class="kt">string</span><span class="p">,</span> <span class="m">4</span><span class="p">)</span></code></pre></figure>
+
+<p>We won’t see error here anymore after specifying the buffer size.</p>
+
+<p><br /></p>
+
 <p><strong>Close() function</strong></p>
 
 <p>We can close the channel with builtin <code class="language-plaintext highlighter-rouge">close()</code> function. This sets the response with <code class="language-plaintext highlighter-rouge">true/false</code> value to indicate no more value will be send to the channels.</p>
@@ -234,5 +242,5 @@ fatal error: all goroutines are asleep - deadlock!</p>
 
 <p><br /></p>
 
-<p>Hope my contribution will help you to understand this topic. Please feel free to reach out to me on twitter <a href="https://twitter.com/rajendraarora16">@rajendraarora16</a> for any queries. 😉</p>
+<p>Hope my contribution will help you to understand this topic. Please feel free to reach out to me on twitter <a href="https://twitter.com/rajendraarora16">@rajendraarora16</a> for any queries.</p>
 :ET
