@@ -1,6 +1,6 @@
-I"�.<h1 id="channel">Channel</h1>
+I"s9<h1 id="channel">Channel</h1>
 
-<p>A channel is a communication technique to which allows to let Goroutine communicate with another Goroutine.
+<p>A channel is a communication technique which allows a Goroutine to communicate with another Goroutine.
 <br /><br /></p>
 
 <p><img src="/assets/img/channel.png" alt="Channel" /></p>
@@ -132,6 +132,37 @@
 <span class="c">// Hello world</span>
 <span class="c">// End main function</span></code></pre></figure>
 
+<p><br /></p>
+
+<p>Let’s have a quick another look at this simple channel program:</p>
+
+<figure class="highlight"><pre><code class="language-go" data-lang="go"><span class="k">package</span> <span class="n">main</span>
+
+<span class="k">import</span> <span class="s">"fmt"</span>
+
+<span class="k">func</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
+
+   <span class="c">// syntax for channel</span>
+   <span class="n">ch</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">(</span><span class="k">chan</span> <span class="kt">string</span><span class="p">)</span>
+
+   <span class="n">ch</span> <span class="o">&lt;-</span> <span class="s">"this is my msg 1"</span>
+   <span class="n">ch</span> <span class="o">&lt;-</span> <span class="s">"this is my msg 2"</span>
+   <span class="n">ch</span> <span class="o">&lt;-</span> <span class="s">"this is my msg 3"</span>
+   <span class="n">ch</span> <span class="o">&lt;-</span> <span class="s">"this is my msg 4"</span>
+
+   <span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="o">&lt;-</span><span class="n">ch</span><span class="p">)</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>Here our channel is unbuffered (we didn’t specify any buffer size when make()ing the channel) meaning that they will only accept sends (channel &lt;-) if there is a corresponding receive () ready to receive the sent value. So in this case ‘ch’ is an unbuffered channel and we are attempting to send onto it,
+but there is no receiver of this channel.</p>
+
+<p>We can fix it by either making the channel buffered or registering a receiver on this channel in another go routine.</p>
+
+<p>So we might see some out error:
+fatal error: all goroutines are asleep - deadlock!</p>
+
+<p><br /></p>
+
 <p><strong>Close() function</strong></p>
 
 <p>We can close the channel with builtin <code class="language-plaintext highlighter-rouge">close()</code> function. This sets the response with <code class="language-plaintext highlighter-rouge">true/false</code> value to indicate no more value will be send to the channels.</p>
@@ -141,6 +172,8 @@
 <p>Open or close channel value can be checked with the following syntax:</p>
 
 <figure class="highlight"><pre><code class="language-go" data-lang="go"><span class="n">res</span><span class="p">,</span> <span class="n">ok</span> <span class="o">:=</span> <span class="o">&lt;-</span><span class="n">ch</span></code></pre></figure>
+
+<p><br /></p>
 
 <p>Let’s try with one example to check the close function:</p>
 
@@ -181,7 +214,7 @@
 
 <span class="k">func</span> <span class="n">goRoutineFun</span><span class="p">(</span><span class="n">ch</span> <span class="k">chan</span> <span class="kt">string</span><span class="p">)</span> <span class="p">{</span>
 	<span class="k">for</span> <span class="n">i</span> <span class="o">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="m">5</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">{</span>
-		<span class="c">/* This is how we concat Iterated loop value with string */</span>
+		<span class="c">/* This is how we concat the iterated loop value with string */</span>
 		<span class="n">msg</span> <span class="o">:=</span> <span class="s">"Channel message "</span> <span class="o">+</span> <span class="n">strconv</span><span class="o">.</span><span class="n">Itoa</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
 		<span class="n">ch</span> <span class="o">&lt;-</span> <span class="n">msg</span>
 	<span class="p">}</span>
@@ -190,4 +223,16 @@
 	<span class="nb">close</span><span class="p">(</span><span class="n">ch</span><span class="p">)</span>
 <span class="p">}</span></code></pre></figure>
 
+<p>We will see the following output:</p>
+
+<figure class="highlight"><pre><code class="language-go" data-lang="go"><span class="c">// Channel is opened with response: Channel message 0 and status: true</span>
+<span class="c">// Channel is opened with response: Channel message 1 and status: true</span>
+<span class="c">// Channel is opened with response: Channel message 2 and status: true</span>
+<span class="c">// Channel is opened with response: Channel message 3 and status: true</span>
+<span class="c">// Channel is opened with response: Channel message 4 and status: true</span>
+<span class="c">// Channel is closed: false</span></code></pre></figure>
+
+<p><br /></p>
+
+<p>Hope my contribution will help you to understand this topic. Please feel free to reach out to me on twitter <a href="https://twitter.com/rajendraarora16">@rajendraarora16</a> for any queries. 😉</p>
 :ET

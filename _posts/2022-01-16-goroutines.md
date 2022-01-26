@@ -272,4 +272,4 @@ Now that will put some delays to get your output:
 
 <br/>
 
-Hope my contribution will help you to understand this topic. Please feel free to reach out to me on twitter [@rajendraarora16](https://twitter.com/rajendraarora16) for any queries. 😉
+Hope my contribution will help you to understand this topic. Please feel free to reach out to me on twitter [@rajendraarora16](https://twitter.com/rajendraarora16) for any queries.
